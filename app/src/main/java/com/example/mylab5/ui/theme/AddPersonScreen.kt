@@ -2,6 +2,8 @@ package com.example.mylab5.ui.theme
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
@@ -79,7 +81,6 @@ fun AddPersonScreen(
 
     Column {
 
-        // ===== TOP BAR =====
         TopAppBar(
             title = { Text(stringResource(R.string.add_title)) },
             navigationIcon = {
@@ -95,6 +96,7 @@ fun AddPersonScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(20.dp)
         ) {
 
