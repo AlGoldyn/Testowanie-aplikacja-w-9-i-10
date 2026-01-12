@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,18 +30,18 @@ fun AddPersonScreen(
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    var first by remember { mutableStateOf("") }
-    var last by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf<LocalDate?>(null) }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
+    var first by rememberSaveable { mutableStateOf("") }
+    var last by rememberSaveable { mutableStateOf("") }
+    var birthDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
+    var phone by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var address by rememberSaveable { mutableStateOf("") }
 
-    var firstError by remember { mutableStateOf<String?>(null) }
-    var lastError by remember { mutableStateOf<String?>(null) }
-    var birthError by remember { mutableStateOf<String?>(null) }
-    var phoneError by remember { mutableStateOf<String?>(null) }
-    var emailError by remember { mutableStateOf<String?>(null) }
+    var firstError by rememberSaveable { mutableStateOf<String?>(null) }
+    var lastError by rememberSaveable { mutableStateOf<String?>(null) }
+    var birthError by rememberSaveable { mutableStateOf<String?>(null) }
+    var phoneError by rememberSaveable { mutableStateOf<String?>(null) }
+    var emailError by rememberSaveable { mutableStateOf<String?>(null) }
 
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
