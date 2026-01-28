@@ -132,7 +132,7 @@ fun LoginScreen(
                             else
                                 Icons.Outlined.Visibility,
                             contentDescription = null,
-                            tint = PurpleText
+                            tint = Color.Black.copy(alpha = 0.7f)
                         )
                     }
                 },

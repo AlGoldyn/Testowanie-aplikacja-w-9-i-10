@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -90,9 +92,10 @@ fun RegisterScreen(
                 modifier = Modifier.clickable { onBackToLogin() }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
+                    imageVector = Icons.Filled.ArrowBackIosNew,
                     contentDescription = null,
-                    tint = PurpleText
+                    tint = PurpleText,
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -169,7 +172,7 @@ fun RegisterScreen(
                             else
                                 Icons.Outlined.Visibility,
                             contentDescription = null,
-                            tint = PurpleText
+                            tint = Color.Black.copy(alpha = 0.7f)
                         )
                     }
                 },
@@ -201,12 +204,12 @@ fun RegisterScreen(
                         confirmPasswordVisible = !confirmPasswordVisible
                     }) {
                         Icon(
-                            imageVector = if (confirmPasswordVisible)
+                            imageVector = if (passwordVisible)
                                 Icons.Outlined.VisibilityOff
                             else
                                 Icons.Outlined.Visibility,
                             contentDescription = null,
-                            tint = PurpleText
+                            tint = Color.Black.copy(alpha = 0.7f)
                         )
                     }
                 },
