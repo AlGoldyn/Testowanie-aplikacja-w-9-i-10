@@ -1,4 +1,4 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.ui.screens.language
 
 import android.app.Activity
 import androidx.compose.foundation.layout.*

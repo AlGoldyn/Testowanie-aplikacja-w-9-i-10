@@ -1,4 +1,4 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.ui.screens.privacyAndLicences
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll

@@ -1,4 +1,4 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

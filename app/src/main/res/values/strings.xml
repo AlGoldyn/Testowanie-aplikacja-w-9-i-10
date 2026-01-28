@@ -52,4 +52,20 @@
     <string name="privacy_title">Polityka prywatności</string>
     <string name="privacy_content">Aplikacja nie gromadzi, nie przetwarza ani nie udostępnia danych osobowych użytkowników poza danymi wprowadzonymi lokalnie w celu działania aplikacji. Wszystkie dane przechowywane są wyłącznie na urządzeniu użytkownika.</string>
 
+    <string name="login_title">Zaloguj się</string>
+    <string name="login_email">Email lub Nazwa Użytkownika</string>
+    <string name="login_password">Hasło</string>
+    <string name="login_forgot">Nie pamiętasz hasła?</string>
+    <string name="login_button">Zaloguj</string>
+    <string name="login_no_account">Nie masz konta?</string>
+    <string name="login_register">Zarejestruj się</string>
+
+
+    <string name="register_title">Rejestracja</string>
+    <string name="register_name">Całe Imię</string>
+    <string name="register_email">Email</string>
+    <string name="register_confirm_password">Potwierdź Hasło</string>
+    <string name="register_button">Zarejestruj się</string>
+    <string name="register_have_account">Masz już konto?</string>
+    <string name="register_sign_in">Zaloguj się</string>
 </resources>

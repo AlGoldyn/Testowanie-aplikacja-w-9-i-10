@@ -1,9 +1,11 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.mylab5.data.local.entity.Person
+import com.example.mylab5.data.local.dao.PersonDao
 
 @Database(entities = [Person::class], version = 1)
 abstract class PersonDatabase : RoomDatabase() {

@@ -1,4 +1,4 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.ui.screens.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
+import com.example.mylab5.ui.navigation.Screen
 
 @Composable
 fun HomeScreen(

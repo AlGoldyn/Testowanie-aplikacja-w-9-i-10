@@ -1,4 +1,4 @@
-package com.example.mylab5.ui.theme
+package com.example.mylab5.ui.screens.delete
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
+import com.example.mylab5.data.local.entity.Person
+import com.example.mylab5.data.local.database.PersonDatabase
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
