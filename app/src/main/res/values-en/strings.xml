@@ -50,7 +50,6 @@
     <string name="licenses_title">Licenses</string>
     <string name="licenses_content">The application uses the following open-source libraries: Android Jetpack, Jetpack Compose, Material3 and Room. All libraries are used in compliance with their licenses.</string>
     <string name="privacy_title">Privacy policy</string>
-
     <string name="privacy_content">The application does not collect, process, or share users personal data except for data entered locally for the apps functionality. All data is stored exclusively on the users device.</string>
 
     <string name="login_title">Sign in</string>
@@ -61,7 +60,6 @@
     <string name="login_no_account">Don\'t have an account?</string>
     <string name="login_register">Sign up</string>
 
-
     <string name="register_title">Sign Up</string>
     <string name="register_name">Full Name</string>
     <string name="register_email">Email</string>
@@ -69,6 +67,11 @@
     <string name="register_button">Sign Up</string>
     <string name="register_have_account">Already have an account?</string>
     <string name="register_sign_in">Sign In</string>
+
+    <string name="error_email_invalid">Invalid email address</string>
+    <string name="error_password_short">Password must be at least 6 characters</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+
 
 
 </resources>
