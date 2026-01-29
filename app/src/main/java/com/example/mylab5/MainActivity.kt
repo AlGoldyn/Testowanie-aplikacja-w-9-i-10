@@ -23,7 +23,7 @@ import com.example.mylab5.ui.screens.list.ListPersonScreen
 import com.example.mylab5.ui.navigation.Screen
 import com.example.mylab5.ui.screens.privacyAndLicences.LicensesScreen
 import com.example.mylab5.ui.screens.privacyAndLicences.PrivacyPolicyScreen
-import com.example.mylab5.ui.screens.auth.LoginScreen
+import com.example.mylab5.ui.screens.auth.login.LoginScreen
 import com.example.mylab5.ui.screens.auth.RegisterScreen
 import com.example.mylab5.ui.theme.MyLab5Theme
 import com.example.mylab5.util.LocalHelper

@@ -69,7 +69,7 @@
     <string name="register_have_account">Masz już konto?</string>
     <string name="register_sign_in">Zaloguj się</string>
 
-    <string name="error_email_invalid">Niepoprawny adres e-mail</string>
+    <string name="error_invalid_login">Niepoprawny adres e-mail</string>
     <string name="error_password_short">Hasło musi mieć min. 6 znaków</string>
     <string name="error_password_mismatch">Hasła nie są takie same</string>
 

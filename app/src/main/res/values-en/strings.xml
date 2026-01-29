@@ -68,7 +68,7 @@
     <string name="register_have_account">Already have an account?</string>
     <string name="register_sign_in">Sign In</string>
 
-    <string name="error_email_invalid">Invalid email address</string>
+    <string name="error_invalid_login">Invalid email address</string>
     <string name="error_password_short">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
 
