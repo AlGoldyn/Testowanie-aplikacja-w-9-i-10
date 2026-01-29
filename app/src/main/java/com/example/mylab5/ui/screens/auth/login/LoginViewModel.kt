@@ -5,6 +5,7 @@ import com.example.mylab5.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import com.example.mylab5.util.AuthPreferences
 
 class LoginViewModel : ViewModel() {
 
@@ -31,7 +32,7 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun submit(onSuccess: () -> Unit) {
+    fun submit(context: android.content.Context, onSuccess: () -> Unit) {
         val s = _state.value
 
         var emailError: Int? = null
@@ -47,10 +48,7 @@ class LoginViewModel : ViewModel() {
 
         if (emailError != null || passwordError != null) {
             _state.update {
-                it.copy(
-                    emailError = emailError,
-                    passwordError = passwordError
-                )
+                it.copy(emailError = emailError, passwordError = passwordError)
             }
             return
         }
@@ -59,6 +57,9 @@ class LoginViewModel : ViewModel() {
         val validPassword = "123456"
 
         if (s.email == validEmail && s.password == validPassword) {
+
+            AuthPreferences.setLoggedIn(context, true)
+
             onSuccess()
         } else {
             _state.update {

@@ -99,9 +99,16 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { paddingValues ->
 
+                    val context = this
+                    val startRoute =
+                        if (AuthPreferences.isLoggedIn(context))
+                            Screen.Home.route
+                        else
+                            Screen.Login.route
+
                     NavHost(
                         navController = navController,
-                        startDestination = startDestination,
+                        startDestination = startRoute,
                         modifier = Modifier.padding(paddingValues)
                     ) {
 

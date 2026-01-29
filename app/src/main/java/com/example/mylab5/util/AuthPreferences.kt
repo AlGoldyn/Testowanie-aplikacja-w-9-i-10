@@ -5,7 +5,7 @@ import android.content.Context
 object AuthPreferences {
 
     private const val PREFS = "auth_prefs"
-    private const val KEY_LOGGED = "is_logged"
+    private const val KEY_LOGGED = "logged"
 
     fun setLoggedIn(context: Context, value: Boolean) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
