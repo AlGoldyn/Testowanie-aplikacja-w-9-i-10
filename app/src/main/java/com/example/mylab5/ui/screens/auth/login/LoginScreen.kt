@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -60,7 +63,7 @@ fun LoginScreen(
             Spacer(Modifier.height(32.dp))
 
             Text(
-                stringResource(R.string.login_title),
+                text = stringResource(R.string.login_title),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = PurpleText
@@ -68,6 +71,7 @@ fun LoginScreen(
 
             Spacer(Modifier.height(46.dp))
 
+            // ===== EMAIL =====
 
             OutlinedTextField(
                 value = state.email,
@@ -88,28 +92,27 @@ fun LoginScreen(
                 shape = RoundedCornerShape(Radius),
                 supportingText = {
                     state.emailError?.let {
-                        Text(stringResource(it), color = Color.Red)
+                        Text(
+                            stringResource(it),
+                            color = Color.Red,
+                            fontSize = 13.sp
+                        )
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = BorderPurple,
                     unfocusedBorderColor = BorderPurple,
-
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-
                     focusedPlaceholderColor = Color.Gray,
                     unfocusedPlaceholderColor = Color.Gray,
-
-                    focusedLeadingIconColor = PurpleText,
-                    unfocusedLeadingIconColor = PurpleText,
-
                     cursorColor = PurpleText
                 )
             )
 
             Spacer(Modifier.height(40.dp))
 
+            // ===== PASSWORD =====
 
             OutlinedTextField(
                 value = state.password,
@@ -131,7 +134,7 @@ fun LoginScreen(
                             if (passwordVisible)
                                 Icons.Outlined.VisibilityOff
                             else Icons.Outlined.Visibility,
-                            null,
+                            contentDescription = null,
                             tint = Color.Black.copy(alpha = 0.7f)
                         )
                     }
@@ -144,22 +147,20 @@ fun LoginScreen(
                 shape = RoundedCornerShape(Radius),
                 supportingText = {
                     state.passwordError?.let {
-                        Text(stringResource(it), color = Color.Red)
+                        Text(
+                            stringResource(it),
+                            color = Color.Red,
+                            fontSize = 13.sp
+                        )
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = BorderPurple,
                     unfocusedBorderColor = BorderPurple,
-
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-
                     focusedPlaceholderColor = Color.Gray,
                     unfocusedPlaceholderColor = Color.Gray,
-
-                    focusedLeadingIconColor = PurpleText,
-                    unfocusedLeadingIconColor = PurpleText,
-
                     cursorColor = PurpleText
                 )
             )
@@ -167,7 +168,7 @@ fun LoginScreen(
             Spacer(Modifier.height(40.dp))
 
             Text(
-                stringResource(R.string.login_forgot),
+                text = stringResource(R.string.login_forgot),
                 fontWeight = FontWeight.Bold,
                 color = PurpleText,
                 modifier = Modifier.align(Alignment.End)
@@ -175,9 +176,13 @@ fun LoginScreen(
 
             Spacer(Modifier.height(40.dp))
 
+            // ===== BUTTON =====
+
             Button(
                 onClick = { vm.submit(onLoginSuccess) },
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 shape = RoundedCornerShape(Radius),
                 colors = ButtonDefaults.buttonColors(containerColor = PurpleButton)
             ) {
@@ -187,15 +192,33 @@ fun LoginScreen(
                     color = Color.White
                 )
             }
+
+            // ===== GLOBAL LOGIN ERROR =====
+
+            state.loginError?.let {
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    stringResource(it),
+                    color = Color.Red,
+                    fontSize = 13.sp
+                )
+            }
         }
+
+        // ===== BOTTOM REGISTER =====
 
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp)
         ) {
-            Text(stringResource(R.string.login_no_account), color = PurpleText)
+            Text(
+                stringResource(R.string.login_no_account),
+                color = PurpleText
+            )
+
             Spacer(Modifier.width(4.dp))
+
             Text(
                 stringResource(R.string.login_register),
                 fontWeight = FontWeight.Bold,
