@@ -74,4 +74,8 @@
 
     <string name="logout">Logout</string>
 
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="edit_contact">Edit contact</string>
+
 </resources>
