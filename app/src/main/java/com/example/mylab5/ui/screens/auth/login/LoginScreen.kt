@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +37,8 @@ fun LoginScreen(
     vm: LoginViewModel = viewModel()
 ) {
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
+
     var passwordVisible by remember { mutableStateOf(false) }
 
     Box(
@@ -71,7 +74,6 @@ fun LoginScreen(
 
             Spacer(Modifier.height(46.dp))
 
-            // ===== EMAIL =====
 
             OutlinedTextField(
                 value = state.email,
@@ -112,7 +114,6 @@ fun LoginScreen(
 
             Spacer(Modifier.height(40.dp))
 
-            // ===== PASSWORD =====
 
             OutlinedTextField(
                 value = state.password,
@@ -176,7 +177,6 @@ fun LoginScreen(
 
             Spacer(Modifier.height(40.dp))
 
-            // ===== BUTTON =====
 
             Button(
                 onClick = { vm.submit(onLoginSuccess) },
@@ -193,8 +193,6 @@ fun LoginScreen(
                 )
             }
 
-            // ===== GLOBAL LOGIN ERROR =====
-
             state.loginError?.let {
                 Spacer(Modifier.height(12.dp))
                 Text(
@@ -204,8 +202,6 @@ fun LoginScreen(
                 )
             }
         }
-
-        // ===== BOTTOM REGISTER =====
 
         Row(
             modifier = Modifier

@@ -72,6 +72,6 @@
     <string name="error_password_short">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
 
-
+    <string name="logout">Logout</string>
 
 </resources>

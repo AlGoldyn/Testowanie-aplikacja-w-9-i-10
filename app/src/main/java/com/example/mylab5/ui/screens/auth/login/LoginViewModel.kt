@@ -11,24 +11,20 @@ class LoginViewModel : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
-    // ===== ZASZYTE DANE =====
-    private val validEmail = "test@test.com"
-    private val validPassword = "123456"
-
-    fun onEmailChange(v: String) {
+    fun onEmailChange(value: String) {
         _state.update {
             it.copy(
-                email = v,
+                email = value,
                 emailError = null,
                 loginError = null
             )
         }
     }
 
-    fun onPasswordChange(v: String) {
+    fun onPasswordChange(value: String) {
         _state.update {
             it.copy(
-                password = v,
+                password = value,
                 passwordError = null,
                 loginError = null
             )
@@ -38,31 +34,30 @@ class LoginViewModel : ViewModel() {
     fun submit(onSuccess: () -> Unit) {
         val s = _state.value
 
-        var emailErr: Int? = null
-        var passErr: Int? = null
+        var emailError: Int? = null
+        var passwordError: Int? = null
 
-        // ===== EMAIL CHECK =====
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s.email).matches()) {
-            emailErr = R.string.error_email
+            emailError = R.string.error_invalid_login
         }
 
-        // ===== PASSWORD CHECK =====
         if (s.password.length < 6) {
-            passErr = R.string.error_password_mismatch
+            passwordError = R.string.error_password_short
         }
 
-        if (emailErr != null || passErr != null) {
+        if (emailError != null || passwordError != null) {
             _state.update {
                 it.copy(
-                    emailError = emailErr,
-                    passwordError = passErr,
-                    loginError = null
+                    emailError = emailError,
+                    passwordError = passwordError
                 )
             }
             return
         }
 
-        // ===== LOGIN MATCH =====
+        val validEmail = "test@test.com"
+        val validPassword = "123456"
+
         if (s.email == validEmail && s.password == validPassword) {
             onSuccess()
         } else {

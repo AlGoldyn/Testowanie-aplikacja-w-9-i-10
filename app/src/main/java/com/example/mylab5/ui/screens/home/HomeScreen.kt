@@ -6,15 +6,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
 import com.example.mylab5.ui.navigation.Screen
+import com.example.mylab5.util.AuthPreferences
 
 @Composable
 fun HomeScreen(
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onLogoutNavigate: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -29,7 +34,7 @@ fun HomeScreen(
             Text(stringResource(R.string.home_add_person))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
         Button(
             onClick = { onNavigate(Screen.List.route) },
@@ -38,7 +43,7 @@ fun HomeScreen(
             Text(stringResource(R.string.home_list))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
         Button(
             onClick = { onNavigate(Screen.Delete.route) },
@@ -47,7 +52,7 @@ fun HomeScreen(
             Text(stringResource(R.string.home_delete))
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(Modifier.height(24.dp))
 
         Button(
             onClick = { onNavigate(Screen.Language.route) },
@@ -56,7 +61,7 @@ fun HomeScreen(
             Text(stringResource(R.string.language_title))
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(Modifier.height(24.dp))
 
         Button(
             onClick = { onNavigate(Screen.Privacy.route) },
@@ -65,13 +70,25 @@ fun HomeScreen(
             Text(stringResource(R.string.home_privacy))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
         Button(
             onClick = { onNavigate(Screen.Licenses.route) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.home_licenses))
+        }
+
+        Spacer(Modifier.height(32.dp))
+
+        Button(
+            onClick = {
+                AuthPreferences.setLoggedIn(context, false)
+                onLogoutNavigate()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.logout))
         }
     }
 }
