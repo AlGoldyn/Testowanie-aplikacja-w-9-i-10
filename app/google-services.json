@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "864007068696",
+    "project_id": "mobilelogin-249b9",
+    "storage_bucket": "mobilelogin-249b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864007068696:android:e5d216c9f25fce0c1e776d",
+        "android_client_info": {
+          "package_name": "com.example.mylab5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nTdyw5vsIeVV2j1t_DFu_3uKJFWlzAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

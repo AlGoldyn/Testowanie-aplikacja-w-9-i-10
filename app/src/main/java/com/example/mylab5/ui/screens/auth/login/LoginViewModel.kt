@@ -2,69 +2,54 @@ package com.example.mylab5.ui.screens.auth.login
 
 import androidx.lifecycle.ViewModel
 import com.example.mylab5.R
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import com.example.mylab5.util.AuthPreferences
+import kotlinx.coroutines.flow.asStateFlow
 
 class LoginViewModel : ViewModel() {
 
+    private val auth = FirebaseAuth.getInstance()
+
     private val _state = MutableStateFlow(LoginState())
-    val state: StateFlow<LoginState> = _state
+    val state = _state.asStateFlow()
 
-    fun onEmailChange(value: String) {
-        _state.update {
-            it.copy(
-                email = value,
-                emailError = null,
-                loginError = null
-            )
-        }
+    fun onEmailChange(v: String) {
+        _state.value = _state.value.copy(email = v, emailError = null, loginError = null)
     }
 
-    fun onPasswordChange(value: String) {
-        _state.update {
-            it.copy(
-                password = value,
-                passwordError = null,
-                loginError = null
-            )
-        }
+    fun onPasswordChange(v: String) {
+        _state.value = _state.value.copy(password = v, passwordError = null, loginError = null)
     }
 
-    fun submit(context: android.content.Context, onSuccess: () -> Unit) {
+    fun submit(
+        onSuccess: () -> Unit,
+        saveLogin: (Boolean) -> Unit
+    ) {
         val s = _state.value
 
-        var emailError: Int? = null
-        var passwordError: Int? = null
+        var ok = true
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s.email).matches()) {
-            emailError = R.string.error_invalid_login
+            _state.value = _state.value.copy(emailError = R.string.error_invalid_login)
+            ok = false
         }
 
         if (s.password.length < 6) {
-            passwordError = R.string.error_password_short
+            _state.value = _state.value.copy(passwordError = R.string.error_password_short)
+            ok = false
         }
 
-        if (emailError != null || passwordError != null) {
-            _state.update {
-                it.copy(emailError = emailError, passwordError = passwordError)
+        if (!ok) return
+
+        auth.signInWithEmailAndPassword(s.email, s.password)
+            .addOnSuccessListener {
+                saveLogin(true)
+                onSuccess()
             }
-            return
-        }
-
-        val validEmail = "test@test.com"
-        val validPassword = "123456"
-
-        if (s.email == validEmail && s.password == validPassword) {
-
-            AuthPreferences.setLoggedIn(context, true)
-
-            onSuccess()
-        } else {
-            _state.update {
-                it.copy(loginError = R.string.error_invalid_login)
+            .addOnFailureListener {
+                _state.value = _state.value.copy(
+                    loginError = R.string.error_invalid_login
+                )
             }
-        }
     }
 }

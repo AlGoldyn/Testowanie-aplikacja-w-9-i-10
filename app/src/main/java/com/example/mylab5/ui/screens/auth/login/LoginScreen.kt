@@ -24,6 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylab5.R
+import com.example.mylab5.util.AuthPreferences
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 
 private val PurpleText = Color(0xFF471AA0)
 private val PurpleButton = Color(0xFFBB84E8)
@@ -168,18 +171,22 @@ fun LoginScreen(
 
             Spacer(Modifier.height(40.dp))
 
-            Text(
-                text = stringResource(R.string.login_forgot),
-                fontWeight = FontWeight.Bold,
-                color = PurpleText,
+            TextButton(
+                onClick = { Firebase.analytics.logEvent("Forgot_password", null) },
                 modifier = Modifier.align(Alignment.End)
             )
-
+            {
+                Text(
+                    text = stringResource(R.string.login_forgot),
+                    fontWeight = FontWeight.Bold,
+                    color = PurpleText,
+                )
+            }
             Spacer(Modifier.height(40.dp))
 
 
             Button(
-                onClick = { vm.submit(context, onLoginSuccess) },
+                onClick = {  vm.submit(onSuccess = onLoginSuccess, saveLogin = { logged -> AuthPreferences.setLoggedIn(context, logged) })},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

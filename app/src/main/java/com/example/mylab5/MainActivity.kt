@@ -24,7 +24,7 @@ import com.example.mylab5.ui.screens.list.ListPersonScreen
 import com.example.mylab5.ui.screens.privacyAndLicences.LicensesScreen
 import com.example.mylab5.ui.screens.privacyAndLicences.PrivacyPolicyScreen
 import com.example.mylab5.ui.screens.auth.login.LoginScreen
-import com.example.mylab5.ui.screens.auth.RegisterScreen
+import com.example.mylab5.ui.screens.auth.register.RegisterScreen
 import com.example.mylab5.ui.theme.MyLab5Theme
 import com.example.mylab5.util.AuthPreferences
 import com.example.mylab5.util.LocalHelper
@@ -129,14 +129,10 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(
                                 onBackToLogin = {
                                     navController.popBackStack()
-                                },
-                                onRegisterSuccess = {
-                                    navController.navigate(Screen.Home.route) {
-                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                    }
                                 }
                             )
                         }
+
 
                         composable(Screen.Home.route) {
                             HomeScreen(
