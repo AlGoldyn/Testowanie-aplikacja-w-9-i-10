@@ -84,8 +84,6 @@ fun DeletePersonScreen(
         }
     }
 
-    // ================= CONFIRM DIALOG =================
-
     if (toDelete != null) {
         AlertDialog(
             onDismissRequest = { toDelete = null },

@@ -28,15 +28,11 @@ class ListPersonViewModel(
     private val _persons = MutableStateFlow<List<Person>>(emptyList())
     val persons: StateFlow<List<Person>> = _persons.asStateFlow()
 
-    // ================= LOAD ONLY LOCAL =================
-
     fun loadLocal() {
         viewModelScope.launch(Dispatchers.IO) {
             _persons.value = db.personDao().getAll()
         }
     }
-
-    // ================= FIREBASE SYNC =================
 
     fun syncAndLoad() {
         viewModelScope.launch {
@@ -55,7 +51,6 @@ class ListPersonViewModel(
 
                 withContext(Dispatchers.IO) {
 
-                    // 🔥 czyścimy lokalną bazę — konto = własne dane
                     db.personDao().deleteAll()
 
                     snap.documents.forEach { doc ->
@@ -72,21 +67,14 @@ class ListPersonViewModel(
                 }
 
             } catch (e: Exception) {
-                // fallback — tylko lokalne
                 loadLocal()
             }
         }
     }
 
-    // ================= UPDATE =================
-
     fun updatePerson(person: Person) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            // ROOM
             db.personDao().update(person)
-
-            // FIREBASE
             firebaseRepo.updateContact(person.toFirebase())
 
             _persons.value = db.personDao().getAll()

@@ -35,9 +35,8 @@ class RegisterViewModel : ViewModel() {
         val s = _state.value
         var ok = true
 
-        val email = s.email.trim()   // ✅ KLUCZOWE
+        val email = s.email.trim()
 
-        // ===== NAME =====
         if (s.name.isBlank()) {
             _state.value = _state.value.copy(
                 nameError = R.string.error_required
@@ -45,15 +44,13 @@ class RegisterViewModel : ViewModel() {
             ok = false
         }
 
-        // ===== EMAIL =====
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _state.value = _state.value.copy(
-                emailError = R.string.error_email   // ✅ poprawny string
+                emailError = R.string.error_email
             )
             ok = false
         }
 
-        // ===== PASSWORD =====
         if (s.password.length < 6) {
             _state.value = _state.value.copy(
                 passwordError = R.string.error_password_short
@@ -61,7 +58,6 @@ class RegisterViewModel : ViewModel() {
             ok = false
         }
 
-        // ===== CONFIRM =====
         if (s.password != s.confirmPassword) {
             _state.value = _state.value.copy(
                 confirmPasswordError = R.string.error_password_mismatch
@@ -73,7 +69,6 @@ class RegisterViewModel : ViewModel() {
 
         _state.value = _state.value.copy(loading = true)
 
-        // ===== FIREBASE REGISTER =====
         auth.createUserWithEmailAndPassword(email, s.password)
             .addOnSuccessListener {
                 Log.d("REGISTER", "User created OK: $email")

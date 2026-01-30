@@ -45,8 +45,6 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 val refreshTrigger = remember { mutableStateOf(false) }
-
-                // ✅ AUTO LOGIN START
                 val startDestination =
                     if (AuthPreferences.isLoggedIn(this))
                         Screen.Home.route
