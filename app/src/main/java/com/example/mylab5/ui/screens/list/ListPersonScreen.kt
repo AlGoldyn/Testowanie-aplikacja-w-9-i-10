@@ -14,18 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylab5.R
 import com.example.mylab5.data.local.database.PersonDatabase
 import com.example.mylab5.data.local.entity.Person
-import com.example.mylab5.data.remote.FirebasePerson
-import com.example.mylab5.data.remote.toLocal
-import com.example.mylab5.data.remote.toFirebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.example.mylab5.data.remote.FirebaseContactsRepository
+import com.example.mylab5.ui.viewmodel.ListPersonVMFactory
+import com.example.mylab5.ui.viewmodel.ListPersonViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,45 +29,23 @@ fun ListPersonScreen(
     refreshTrigger: MutableState<Boolean>,
     onBack: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
 
-    val auth = FirebaseAuth.getInstance()
-    val firestore = FirebaseFirestore.getInstance()
-    val uid = auth.currentUser?.uid
+    val vm: ListPersonViewModel = viewModel(
+        factory = ListPersonVMFactory(
+            db,
+            FirebaseContactsRepository()
+        )
+    )
 
-    var persons by remember { mutableStateOf<List<Person>>(emptyList()) }
+    val persons by vm.persons.collectAsState()
     var selectedPerson by remember { mutableStateOf<Person?>(null) }
     var editingPerson by remember { mutableStateOf<Person?>(null) }
     var search by remember { mutableStateOf("") }
 
-    // ================= FIREBASE → ROOM SYNC =================
-
+    // 🔄 sync + load
     LaunchedEffect(refreshTrigger.value) {
-        uid?.let { userId ->
-
-            val snap = firestore.collection("users")
-                .document(userId)
-                .collection("contacts")
-                .get()
-                .await()
-
-            withContext(Dispatchers.IO) {
-
-                val dao = db.personDao()
-
-                snap.documents.forEach { doc ->
-                    val remote = doc.toObject(FirebasePerson::class.java)
-                    if (remote != null) {
-                        dao.insert(remote.toLocal()) // ✅ REPLACE by ID
-                    }
-                }
-
-                persons = dao.getAll()
-            }
-        }
+        vm.syncAndLoad()
     }
-
-    // ================= FILTER =================
 
     val filteredPersons = persons
         .filter {
@@ -84,18 +57,13 @@ fun ListPersonScreen(
         }
         .sortedBy { it.firstName.lowercase() }
 
-    // ================= UI =================
-
     Column {
 
         TopAppBar(
             title = { Text(stringResource(R.string.list_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
-                    )
+                    Icon(Icons.Default.ArrowBack, null)
                 }
             }
         )
@@ -201,30 +169,17 @@ fun ListPersonScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        scope.launch {
+                        val updated = editingPerson!!.copy(
+                            firstName = firstName,
+                            lastName = lastName,
+                            phone = phone,
+                            email = email,
+                            birthDate = birth,
+                            address = address
+                        )
 
-                            val updated = editingPerson!!.copy(
-                                firstName = firstName,
-                                lastName = lastName,
-                                phone = phone,
-                                email = email,
-                                birthDate = birth,
-                                address = address
-                            )
-
-                            db.personDao().update(updated)
-
-                            uid?.let {
-                                firestore.collection("users")
-                                    .document(it)
-                                    .collection("contacts")
-                                    .document(updated.id.toString())
-                                    .set(updated.toFirebase())
-                            }
-
-                            persons = db.personDao().getAll()
-                            editingPerson = null
-                        }
+                        vm.updatePerson(updated)
+                        editingPerson = null
                     }
                 ) {
                     Text(stringResource(R.string.save))

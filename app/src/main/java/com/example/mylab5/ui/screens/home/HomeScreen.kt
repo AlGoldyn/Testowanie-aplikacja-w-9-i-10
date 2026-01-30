@@ -71,24 +71,6 @@ fun HomeScreen(
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { onNavigate(Screen.Privacy.route) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.home_privacy))
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        Button(
-            onClick = { onNavigate(Screen.Licenses.route) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.home_licenses))
-        }
-
-        Spacer(Modifier.height(32.dp))
-
-        Button(
             onClick = {
 
                 FirebaseAuth.getInstance().signOut()

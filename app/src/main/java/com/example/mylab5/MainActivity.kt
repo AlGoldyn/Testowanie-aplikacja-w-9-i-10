@@ -21,8 +21,6 @@ import com.example.mylab5.ui.screens.delete.DeletePersonScreen
 import com.example.mylab5.ui.screens.home.HomeScreen
 import com.example.mylab5.ui.screens.language.LanguageScreen
 import com.example.mylab5.ui.screens.list.ListPersonScreen
-import com.example.mylab5.ui.screens.privacyAndLicences.LicensesScreen
-import com.example.mylab5.ui.screens.privacyAndLicences.PrivacyPolicyScreen
 import com.example.mylab5.ui.screens.auth.login.LoginScreen
 import com.example.mylab5.ui.screens.auth.register.RegisterScreen
 import com.example.mylab5.ui.theme.MyLab5Theme
@@ -169,18 +167,6 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Language.route) {
                             LanguageScreen {
-                                navController.navigateUp()
-                            }
-                        }
-
-                        composable(Screen.Privacy.route) {
-                            PrivacyPolicyScreen {
-                                navController.navigateUp()
-                            }
-                        }
-
-                        composable(Screen.Licenses.route) {
-                            LicensesScreen {
                                 navController.navigateUp()
                             }
                         }

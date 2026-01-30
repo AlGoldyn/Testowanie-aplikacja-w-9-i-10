@@ -47,11 +47,6 @@
     <string name="error_phone">Telefon musi zawierać 9 cyfr</string>
     <string name="error_email">Niepoprawny adres e-mail</string>
 
-    <string name="licenses_title">Licencje</string>
-    <string name="licenses_content">Aplikacja wykorzystuje następujące biblioteki open source: Android Jetpack, Jetpack Compose, Material3 oraz Room. Wszystkie biblioteki są używane zgodnie z ich licencjami.</string>
-    <string name="privacy_title">Polityka prywatności</string>
-    <string name="privacy_content">Aplikacja nie gromadzi, nie przetwarza ani nie udostępnia danych osobowych użytkowników poza danymi wprowadzonymi lokalnie w celu działania aplikacji. Wszystkie dane przechowywane są wyłącznie na urządzeniu użytkownika.</string>
-
     <string name="login_title">Zaloguj się</string>
     <string name="login_email">Email lub Nazwa Użytkownika</string>
     <string name="login_password">Hasło</string>
@@ -79,5 +74,7 @@
     <string name="save">Zapisz</string>
     <string name="edit_contact">Edytuj kontakt</string>
 
+    <string name="delete_confirm_title">Potwierdzenie</string>
+    <string name="delete_confirm_text">Usunąć kontakt %1$s?</string>
 
 </resources>

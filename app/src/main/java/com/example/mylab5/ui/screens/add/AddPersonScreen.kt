@@ -1,7 +1,6 @@
 package com.example.mylab5.ui.screens.add
 
 import android.app.DatePickerDialog
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylab5.R
 import com.example.mylab5.data.local.database.PersonDatabase
 import com.example.mylab5.data.local.entity.Person
 import com.example.mylab5.data.remote.FirebaseContactsRepository
-import com.example.mylab5.data.remote.toFirebase
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
+import com.example.mylab5.ui.viewmodel.AddPersonVMFactory
+import com.example.mylab5.ui.viewmodel.AddPersonViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -32,11 +31,15 @@ fun AddPersonScreen(
     db: PersonDatabase,
     onBack: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    val firebaseRepo = remember { FirebaseContactsRepository() }
+    val vm: AddPersonViewModel = viewModel(
+        factory = AddPersonVMFactory(
+            db,
+            FirebaseContactsRepository()
+        )
+    )
 
     var first by rememberSaveable { mutableStateOf("") }
     var last by rememberSaveable { mutableStateOf("") }
@@ -50,7 +53,6 @@ fun AddPersonScreen(
     var birthError by rememberSaveable { mutableStateOf<String?>(null) }
     var phoneError by rememberSaveable { mutableStateOf<String?>(null) }
     var emailError by rememberSaveable { mutableStateOf<String?>(null) }
-    var saving by remember { mutableStateOf(false) }
 
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -116,9 +118,7 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_first_name)) },
                 isError = firstError != null,
                 supportingText = {
-                    firstError?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
+                    firstError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -131,9 +131,7 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_last_name)) },
                 isError = lastError != null,
                 supportingText = {
-                    lastError?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
+                    lastError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -161,17 +159,12 @@ fun AddPersonScreen(
                             }.show()
                         }
                     ) {
-                        Icon(
-                            Icons.Default.CalendarToday,
-                            contentDescription = null
-                        )
+                        Icon(Icons.Default.CalendarToday, contentDescription = null)
                     }
                 },
                 isError = birthError != null,
                 supportingText = {
-                    birthError?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
+                    birthError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -184,9 +177,7 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_phone)) },
                 isError = phoneError != null,
                 supportingText = {
-                    phoneError?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
+                    phoneError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -199,9 +190,7 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_email)) },
                 isError = emailError != null,
                 supportingText = {
-                    emailError?.let {
-                        Text(it, color = MaterialTheme.colorScheme.error)
-                    }
+                    emailError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -218,34 +207,24 @@ fun AddPersonScreen(
             Spacer(Modifier.height(24.dp))
 
             Button(
-                enabled = !saving,
                 onClick = {
-                    if (saving) return@Button
                     if (!validate()) return@Button
 
-                    saving = true
+                    val person = Person(
+                        firstName = first.trim(),
+                        lastName = last.trim(),
+                        birthDate = birthDate!!.format(formatter),
+                        phone = phone.trim(),
+                        email = email.trim(),
+                        address = address.trim()
+                    )
 
-                    scope.launch {
-
-                        val person = Person(
-                            firstName = first.trim(),
-                            lastName = last.trim(),
-                            birthDate = birthDate!!.format(formatter),
-                            phone = phone.trim(),
-                            email = email.trim(),
-                            address = address.trim()
-                        )
-
-                        val newId = db.personDao().insert(person).toInt()
-                        val withId = person.copy(id = newId)
-
-                        firebaseRepo.saveContact(withId.toFirebase())
-
+                    vm.addPerson(person) {
                         onBack()
                     }
-                }
-            )
-            {
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(stringResource(R.string.add_save))
             }
         }

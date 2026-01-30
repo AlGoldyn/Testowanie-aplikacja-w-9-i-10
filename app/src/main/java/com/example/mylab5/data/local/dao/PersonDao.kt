@@ -24,5 +24,8 @@ interface PersonDao {
     suspend fun update(person: Person)
     @Query("DELETE FROM Person")
     suspend fun clearAll()
+    @Query("DELETE FROM Person")
+    suspend fun deleteAll()
+
 
 }
