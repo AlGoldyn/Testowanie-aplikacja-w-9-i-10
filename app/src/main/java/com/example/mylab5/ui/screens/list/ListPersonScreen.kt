@@ -1,5 +1,6 @@
 package com.example.mylab5.ui.screens.list
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,7 +46,6 @@ fun ListPersonScreen(
     var editingPerson by remember { mutableStateOf<Person?>(null) }
     var search by remember { mutableStateOf("") }
 
-    // 🔄 sync + load
     LaunchedEffect(refreshTrigger.value) {
         vm.syncAndLoad()
     }
@@ -56,6 +59,14 @@ fun ListPersonScreen(
                     it.email.contains(search, true)
         }
         .sortedBy { it.firstName.lowercase() }
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Image(
+            painter = painterResource(R.drawable.list),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
 
     Column {
 
@@ -108,8 +119,6 @@ fun ListPersonScreen(
         }
     }
 
-    // ================= DETAILS =================
-
     if (selectedPerson != null) {
         AlertDialog(
             onDismissRequest = { selectedPerson = null },
@@ -141,8 +150,6 @@ fun ListPersonScreen(
             }
         )
     }
-
-    // ================= EDIT =================
 
     if (editingPerson != null) {
 
@@ -192,4 +199,4 @@ fun ListPersonScreen(
             }
         )
     }
-}
+}}

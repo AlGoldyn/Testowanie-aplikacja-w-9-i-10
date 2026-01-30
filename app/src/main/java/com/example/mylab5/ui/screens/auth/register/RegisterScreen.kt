@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylab5.R
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.zIndex
 
-
+private val DarkPurple = Color(0xFF471AA0)
+private val LightPurple = Color(0xFFBB84E8)
 private val PurpleText = Color(0xFF471AA0)
 private val PurpleButton = Color(0xFFBB84E8)
 private val BorderPurple = Color(0xFF9747FF)
@@ -47,7 +49,24 @@ fun RegisterScreen(
             .background(Color(0xFFF9F6FF))
     ) {
 
-        Column(
+        Box(
+            modifier = Modifier
+                .size(128.dp)
+                .align(Alignment.TopEnd)
+                .offset(x = 0.dp, y = (-90).dp)
+                .zIndex(0f)
+                .background(DarkPurple, CircleShape)
+        )
+        Box(
+            modifier = Modifier
+                .size(142.dp)
+                .align(Alignment.TopEnd)
+                .offset(x = 70.dp, y = (-65).dp)
+                .zIndex(1f)
+                .background(LightPurple, CircleShape)
+        )
+
+    Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)

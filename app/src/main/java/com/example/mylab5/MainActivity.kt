@@ -134,7 +134,6 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Home.route) {
                             HomeScreen(
-                                db = db,
                                 onNavigate = { route ->
                                     navController.navigate(route)
                                 },
@@ -145,6 +144,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
 
                         composable(Screen.Add.route) {
                             AddPersonScreen(db) {
