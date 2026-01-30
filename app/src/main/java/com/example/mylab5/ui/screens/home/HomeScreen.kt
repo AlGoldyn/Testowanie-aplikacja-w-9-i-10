@@ -10,14 +10,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
+import com.example.mylab5.data.local.database.PersonDatabase
 import com.example.mylab5.ui.navigation.Screen
 import com.example.mylab5.util.AuthPreferences
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    db: PersonDatabase,
     onNavigate: (String) -> Unit,
     onLogoutNavigate: () -> Unit
-) {
+)
+ {
     val context = LocalContext.current
 
     Column(
@@ -83,6 +90,13 @@ fun HomeScreen(
 
         Button(
             onClick = {
+
+                FirebaseAuth.getInstance().signOut()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    db.personDao().clearAll()
+                }
+
                 AuthPreferences.setLoggedIn(context, false)
                 onLogoutNavigate()
             },
@@ -90,5 +104,6 @@ fun HomeScreen(
         ) {
             Text(stringResource(R.string.logout))
         }
+
     }
 }

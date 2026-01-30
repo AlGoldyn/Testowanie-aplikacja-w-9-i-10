@@ -15,8 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
-import com.example.mylab5.data.local.entity.Person
 import com.example.mylab5.data.local.database.PersonDatabase
+import com.example.mylab5.data.local.entity.Person
+import com.example.mylab5.data.remote.FirebaseContactsRepository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,6 +27,7 @@ fun DeletePersonScreen(
     onBack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val firebaseRepo = remember { FirebaseContactsRepository() }
 
     var persons by remember { mutableStateOf<List<Person>>(emptyList()) }
     var search by remember { mutableStateOf("") }
@@ -46,6 +48,7 @@ fun DeletePersonScreen(
     }
 
     Column {
+
         TopAppBar(
             title = { Text(stringResource(R.string.delete_title)) },
             navigationIcon = {
@@ -76,8 +79,9 @@ fun DeletePersonScreen(
             LazyColumn {
                 items(
                     items = filteredPersons,
-                    key = { it.id }
+                    key = { p: Person -> p.id }
                 ) { person ->
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -119,6 +123,8 @@ fun DeletePersonScreen(
         }
     }
 
+    // ================= CONFIRM =================
+
     if (personToDelete != null) {
         AlertDialog(
             onDismissRequest = { personToDelete = null },
@@ -135,10 +141,17 @@ fun DeletePersonScreen(
                 TextButton(
                     onClick = {
                         scope.launch {
-                            db.personDao().deleteById(personToDelete!!.id)
+
+                            val idInt = personToDelete!!.id
+
+                            db.personDao().deleteById(idInt)
+
                             persons = db.personDao()
                                 .getAll()
                                 .sortedBy { it.firstName.trim().lowercase() }
+
+                            firebaseRepo.deleteContact(idInt)
+
                             personToDelete = null
                         }
                     }

@@ -136,6 +136,7 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Home.route) {
                             HomeScreen(
+                                db = db,
                                 onNavigate = { route ->
                                     navController.navigate(route)
                                 },

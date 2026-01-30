@@ -1,6 +1,7 @@
 package com.example.mylab5.ui.screens.add
 
 import android.app.DatePickerDialog
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,8 +16,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mylab5.R
-import com.example.mylab5.data.local.entity.Person
 import com.example.mylab5.data.local.database.PersonDatabase
+import com.example.mylab5.data.local.entity.Person
+import com.example.mylab5.data.remote.FirebaseContactsRepository
+import com.example.mylab5.data.remote.toFirebase
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,6 +36,8 @@ fun AddPersonScreen(
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
+    val firebaseRepo = remember { FirebaseContactsRepository() }
+
     var first by rememberSaveable { mutableStateOf("") }
     var last by rememberSaveable { mutableStateOf("") }
     var birthDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
@@ -44,6 +50,7 @@ fun AddPersonScreen(
     var birthError by rememberSaveable { mutableStateOf<String?>(null) }
     var phoneError by rememberSaveable { mutableStateOf<String?>(null) }
     var emailError by rememberSaveable { mutableStateOf<String?>(null) }
+    var saving by remember { mutableStateOf(false) }
 
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -109,7 +116,9 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_first_name)) },
                 isError = firstError != null,
                 supportingText = {
-                    firstError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                    firstError?.let {
+                        Text(it, color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -122,7 +131,9 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_last_name)) },
                 isError = lastError != null,
                 supportingText = {
-                    lastError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                    lastError?.let {
+                        Text(it, color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -137,28 +148,30 @@ fun AddPersonScreen(
                 trailingIcon = {
                     IconButton(
                         onClick = {
-                            val dialog = DatePickerDialog(
+                            DatePickerDialog(
                                 context,
-                                { _, year, month, day ->
-                                    birthDate = LocalDate.of(year, month + 1, day)
+                                { _, y, m, d ->
+                                    birthDate = LocalDate.of(y, m + 1, d)
                                 },
                                 calendar.get(Calendar.YEAR),
                                 calendar.get(Calendar.MONTH),
                                 calendar.get(Calendar.DAY_OF_MONTH)
-                            )
-                            dialog.datePicker.maxDate = System.currentTimeMillis()
-                            dialog.show()
+                            ).apply {
+                                datePicker.maxDate = System.currentTimeMillis()
+                            }.show()
                         }
                     ) {
                         Icon(
                             Icons.Default.CalendarToday,
-                            contentDescription = stringResource(R.string.add_birth)
+                            contentDescription = null
                         )
                     }
                 },
                 isError = birthError != null,
                 supportingText = {
-                    birthError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                    birthError?.let {
+                        Text(it, color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -171,7 +184,9 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_phone)) },
                 isError = phoneError != null,
                 supportingText = {
-                    phoneError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                    phoneError?.let {
+                        Text(it, color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -184,7 +199,9 @@ fun AddPersonScreen(
                 label = { Text(stringResource(R.string.add_email)) },
                 isError = emailError != null,
                 supportingText = {
-                    emailError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                    emailError?.let {
+                        Text(it, color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -201,25 +218,34 @@ fun AddPersonScreen(
             Spacer(Modifier.height(24.dp))
 
             Button(
+                enabled = !saving,
                 onClick = {
-                    if (validate()) {
-                        scope.launch {
-                            db.personDao().insert(
-                                Person(
-                                    firstName = first.trim(),
-                                    lastName = last.trim(),
-                                    birthDate = birthDate!!.format(formatter),
-                                    phone = phone.trim(),
-                                    email = email.trim(),
-                                    address = address.trim()
-                                )
-                            )
-                            onBack()
-                        }
+                    if (saving) return@Button
+                    if (!validate()) return@Button
+
+                    saving = true
+
+                    scope.launch {
+
+                        val person = Person(
+                            firstName = first.trim(),
+                            lastName = last.trim(),
+                            birthDate = birthDate!!.format(formatter),
+                            phone = phone.trim(),
+                            email = email.trim(),
+                            address = address.trim()
+                        )
+
+                        val newId = db.personDao().insert(person).toInt()
+                        val withId = person.copy(id = newId)
+
+                        firebaseRepo.saveContact(withId.toFirebase())
+
+                        onBack()
                     }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
+                }
+            )
+            {
                 Text(stringResource(R.string.add_save))
             }
         }

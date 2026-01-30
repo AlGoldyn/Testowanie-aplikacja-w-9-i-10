@@ -18,7 +18,8 @@ import com.example.mylab5.util.LocalHelper
 fun LanguageScreen(
     onBack: () -> Unit
 ) {
-    val activity = LocalContext.current as Activity
+    val context = LocalContext.current
+    val activity = context as? Activity
 
     Column {
 
@@ -39,12 +40,15 @@ fun LanguageScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Center
         ) {
 
             Button(
                 onClick = {
-                    LocalHelper.applyLanguageAndRestart(activity, "pl")
+                    activity?.let {
+                        LocalHelper.applyLanguageAndRestart(it, "pl")
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -55,7 +59,9 @@ fun LanguageScreen(
 
             Button(
                 onClick = {
-                    LocalHelper.applyLanguageAndRestart(activity, "en")
+                    activity?.let {
+                        LocalHelper.applyLanguageAndRestart(it, "en")
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
